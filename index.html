@@ -1,7 +1,7 @@
 <!DOCTYPE html>
 <html>
 <head>
-    <title>Form with Print on Submit</title>
+    <title>Create GitHub Issue</title>
     <style>
         body {
             font-family: Arial, sans-serif;
@@ -14,7 +14,7 @@
             display: block;
             margin-top: 10px;
         }
-        input, select {
+        input, textarea {
             width: 100%;
             padding: 8px;
             margin-top: 5px;
@@ -34,16 +34,13 @@
     </style>
 </head>
 <body>
-    <h1>User Input Form</h1>
-    <form id="userForm">
-        <label for="name">Name:</label>
-        <input type="text" id="name" name="name">
+    <h1>Create GitHub Issue</h1>
+    <form id="issueForm">
+        <label for="title">Title:</label>
+        <input type="text" id="title" name="title">
 
-        <label for="email">Email:</label>
-        <input type="email" id="email" name="email">
-
-        <label for="age">Age:</label>
-        <input type="number" id="age" name="age">
+        <label for="body">Body:</label>
+        <textarea id="body" name="body"></textarea>
 
         <input type="submit" value="Submit">
     </form>
@@ -51,24 +48,50 @@
     <div id="output"></div>
 
     <script>
-        document.getElementById('userForm').addEventListener('submit', function(event) {
-            event.preventDefault(); // Prevent form from submitting the traditional way
+        document.getElementById('issueForm').addEventListener('submit', function(event) {
+            event.preventDefault();
 
             // Get form data
-            var name = document.getElementById('name').value;
-            var email = document.getElementById('email').value;
-            var age = document.getElementById('age').value;
+            var title = document.getElementById('title').value;
+            var body = document.getElementById('body').value;
 
-            // Create output string
-            var output = `
-                <h2>Form Data:</h2>
-                <p><strong>Name:</strong> ${name}</p>
-                <p><strong>Email:</strong> ${email}</p>
-                <p><strong>Age:</strong> ${age}</p>
-            `;
+            // Your GitHub username and repository name
+            var username = 'YOUR_GITHUB_USERNAME';
+            var repo = 'YOUR_REPOSITORY_NAME';
 
-            // Display form data
-            document.getElementById('output').innerHTML = output;
+            // Your GitHub personal access token
+            var token = 'YOUR_PERSONAL_ACCESS_TOKEN';
+
+            // GitHub API URL to create an issue
+            var url = `https://api.github.com/repos/${username}/${repo}/issues`;
+
+            // Prepare the issue data
+            var issueData = {
+                title: title,
+                body: body
+            };
+
+            // Create a POST request to GitHub API
+            fetch(url, {
+                method: 'POST',
+                headers: {
+                    'Authorization': 'token ' + token,
+                    'Content-Type': 'application/json'
+                },
+                body: JSON.stringify(issueData)
+            })
+            .then(response => response.json())
+            .then(data => {
+                // Output the response
+                var output = `<h2>Issue Created:</h2>
+                              <p><strong>Title:</strong> ${data.title}</p>
+                              <p><strong>URL:</strong> <a href="${data.html_url}" target="_blank">${data.html_url}</a></p>`;
+                document.getElementById('output').innerHTML = output;
+            })
+            .catch(error => {
+                console.error('Error:', error);
+                document.getElementById('output').innerHTML = `<p style="color: red;">Error: ${error.message}</p>`;
+            });
         });
     </script>
 </body>
