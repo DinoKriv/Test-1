@@ -1,35 +1,75 @@
 <!DOCTYPE html>
 <html>
 <head>
-    <title>My Demo Page</title>
+    <title>Form with Print on Submit</title>
     <style>
         body {
             font-family: Arial, sans-serif;
         }
+        form {
+            max-width: 400px;
+            margin: 0 auto;
+        }
+        label {
+            display: block;
+            margin-top: 10px;
+        }
+        input, select {
+            width: 100%;
+            padding: 8px;
+            margin-top: 5px;
+            margin-bottom: 20px;
+            border: 1px solid #ccc;
+            border-radius: 4px;
+        }
+        input[type="submit"] {
+            background-color: #4CAF50;
+            color: white;
+            border: none;
+            cursor: pointer;
+        }
+        input[type="submit"]:hover {
+            background-color: #45a049;
+        }
     </style>
 </head>
 <body>
-    <h1>Welcome to My Demo Page</h1>
-    <p>This is a simple demonstration of an HTML page.</p>
-    <p>Additional text</p>
-    <button id="demoButton">Click Me!</button>
+    <h1>User Input Form</h1>
+    <form id="userForm">
+        <label for="name">Name:</label>
+        <input type="text" id="name" name="name">
 
-    <script>
-        document.getElementById('demoButton').addEventListener('click', function() {
-            alert('Button clicked!');
-        });
-    </script>
-    <form action="submit_form.php" method="post">
-        <label for="name">Name:</label><br>
-        <input type="text" id="name" name="name"><br><br>
+        <label for="email">Email:</label>
+        <input type="email" id="email" name="email">
 
-        <label for="email">Email:</label><br>
-        <input type="email" id="email" name="email"><br><br>
-
-        <label for="age">Age:</label><br>
-        <input type="number" id="age" name="age"><br><br>
+        <label for="age">Age:</label>
+        <input type="number" id="age" name="age">
 
         <input type="submit" value="Submit">
     </form>
+
+    <div id="output"></div>
+
+    <script>
+        document.getElementById('userForm').addEventListener('submit', function(event) {
+            event.preventDefault(); // Prevent form from submitting the traditional way
+
+            // Get form data
+            var name = document.getElementById('name').value;
+            var email = document.getElementById('email').value;
+            var age = document.getElementById('age').value;
+
+            // Create output string
+            var output = `
+                <h2>Form Data:</h2>
+                <p><strong>Name:</strong> ${name}</p>
+                <p><strong>Email:</strong> ${email}</p>
+                <p><strong>Age:</strong> ${age}</p>
+            `;
+
+            // Display form data
+            document.getElementById('output').innerHTML = output;
+        });
+    </script>
 </body>
 </html>
